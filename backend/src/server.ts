@@ -1,11 +1,10 @@
 import 'reflect-metadata';
-import { ConnectionManager, getConnectionManager, getConnection } from 'typeorm';
+import { getConnectionManager } from 'typeorm';
 import express, { Response } from 'express';
 import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import path from 'path';
-// import * as sql from 'mssql';
 
 import { port } from './config';
 import DbConnectionOptions from './dbConfig';
@@ -18,18 +17,6 @@ import { MyContext } from './types';
   const connection = connectionManager.create(DbConnectionOptions);
   await connection.connect();
 
-  // const entityManager = getConnection().manager;
-
-  // const test = await connection.query('select * from test');
-  // console.log('testtttttttttttt-----------------', test);
-
-  // const pool = new sql.ConnectionPool({
-  //   user: 'sa',
-  //   password: 'Onggieoi_123456',
-  //   server: 'localhost',
-  //   database: 'master',
-  // });
-
   // setup Express server
   const app: express.Application = express();
   app.use(cors({
@@ -37,16 +24,11 @@ import { MyContext } from './types';
     credentials: true,
   }));
   app.use(express.json());
-  // app.use(express.urlencoded());
 
   // setup Graphql - apollo
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [
-        path.resolve(__dirname, './resolvers/**/*.resolver.ts'),
-        path.resolve(__dirname, './resolvers/**/*.resolver.js'),
-      ],
-      // globalMiddlewares: [],
+      resolvers: [path.resolve(__dirname, './resolvers/**/*.resolver.[tj]s')],
       validate: false,
     }),
     playground,
