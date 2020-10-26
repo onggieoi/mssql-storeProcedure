@@ -11,9 +11,9 @@ begin
 			select ho+' '+ten as hotenTreEm, *
 			from TreEm inner join DocGia on TreEm.ma_docgia=DocGia.ma_docgia
 			where DocGia.ma_docgia=@madg
+			
 	else
 		print 'khong ton tai doc gia ' + cast(@madg as char(10))
 end
 
 exec sp_XemThongTinDocGia 2
- 
